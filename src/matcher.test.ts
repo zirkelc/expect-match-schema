@@ -101,4 +101,77 @@ describe('toMatchSchema', () => {
       );
     });
   });
+
+  describe('Asymmetric matchers', () => {
+    test('should work with expect.toMatchSchema() as asymmetric matcher', () => {
+      const urlSchema = z.url();
+      const numberSchema = z.number().min(1000);
+
+      const data = {
+        website: 'https://example.com',
+        port: 8080,
+      };
+
+      expect(data).toEqual({
+        website: expect.toMatchSchema(urlSchema),
+        port: expect.toMatchSchema(numberSchema),
+      });
+    });
+
+    test('should work with expect.objectContaining', () => {
+      const userSchema = z.object({
+        name: z.string(),
+        email: z.email(),
+      });
+
+      const response = {
+        user: {
+          name: 'John Doe',
+          email: 'john@example.com',
+          id: 123,
+        },
+        timestamp: Date.now(),
+      };
+
+      expect(response).toEqual(
+        expect.objectContaining({
+          user: expect.toMatchSchema(userSchema),
+        }),
+      );
+    });
+
+    test('should work with expect.arrayContaining', () => {
+      const urlSchema = z.url();
+
+      const urls = [
+        'https://example.com',
+        'https://google.com',
+        'https://github.com',
+      ];
+
+      expect(urls).toEqual(
+        expect.arrayContaining([
+          expect.toMatchSchema(urlSchema),
+          expect.toMatchSchema(urlSchema),
+          expect.toMatchSchema(urlSchema),
+        ]),
+      );
+    });
+
+    test('should fail for invalid data', () => {
+      const emailSchema = z.email();
+
+      const data = {
+        email: 'not-an-email',
+        name: 'John',
+      };
+
+      expect(() => {
+        expect(data).toEqual({
+          email: expect.toMatchSchema(emailSchema),
+          name: 'John',
+        });
+      }).toThrow();
+    });
+  });
 });
