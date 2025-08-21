@@ -1,3 +1,5 @@
+[![npm](https://img.shields.io/npm/dt/expect-match-schema?label=expect-match-schema)](https://www.npmjs.com/package/expect-match-schema)
+
 # `expect.toMatchSchema()`
 
 This package provides a custom matcher for Vitest and Jest to check data against a [standard schema](https://github.com/standard-schema/standard-schema) like [Zod](https://zod.dev/), [ArkType](https://arktype.io/), [Valibot](https://valibot.dev/) and others.
@@ -30,16 +32,43 @@ import { z } from 'zod';
 
 expect.extend({ toMatchSchema });
 
-describe('toMatchSchema', () => {
-  test('should match Zod schema', () => {
-    expect('joe@example.com').toMatchSchema(z.email());
-    expect('https://example.com').toMatchSchema(z.url());
-    expect('192.168.0.1').toMatchSchema(z.ipv4());
-    expect('2020-01-01T06:15:00Z').toMatchSchema(z.iso.datetime());
-    expect({ name: 'John', age: 30 }).toMatchSchema(z.object({
+test('should match Zod schema', () => {
+  expect('john@example.com').toMatchSchema(z.email());
+  expect('https://example.com').toMatchSchema(z.url());
+  expect({ name: 'John', age: 30 }).toMatchSchema(
+    z.object({
       name: z.string(),
       age: z.number(),
-    }));
+    })
+  );
+});
+```
+
+## Asymmetric Matchers
+
+You can also use `expect.toMatchSchema()` as an asymmetric matcher with `expect.objectContaining`, `expect.arrayContaining`, and similar matchers:
+
+```ts
+test('should match Zod schema', () => {
+  const response = {
+    user: {
+      name: 'John Doe',
+      email: 'john@example.com',
+      id: 123,
+    },
+    timestamp: new Date().toISOString(),
+  };
+
+  expect(response).toEqual(
+    expect.objectContaining({
+      user: expect.toMatchSchema(
+        z.object({
+          name: z.string(),
+          email: z.email(),
+        })
+      ),
+      timestamp: expect.toMatchSchema(z.iso.datetime()),
+    });
   });
 });
 ```
