@@ -33,6 +33,9 @@
   "dependencies": {
     "@standard-schema/spec": "^1.0.0"
   },
+  "peerDependencies": {
+    "vitest": "3.x"
+  },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.0",
     "@biomejs/biome": "^1.9.4",
