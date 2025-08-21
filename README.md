@@ -29,22 +29,21 @@ import { describe, expect, test } from 'vitest';
 import { toMatchSchema } from 'expect-match-schema';
 import { z } from 'zod';
 
-
 expect.extend({ toMatchSchema });
 
 test('should match Zod schema', () => {
   expect('john@example.com').toMatchSchema(z.email());
   expect('https://example.com').toMatchSchema(z.url());
-  expect({ name: 'John', age: 30 }).toMatchSchema(
+  expect({ name: 'John', email: 'john@example.com' }).toMatchSchema(
     z.object({
       name: z.string(),
-      age: z.number(),
+      email: z.email(),
     })
   );
 });
 ```
 
-## Asymmetric Matchers
+### Asymmetric Matchers
 
 You can also use `expect.toMatchSchema()` as an asymmetric matcher with `expect.objectContaining`, `expect.arrayContaining`, and similar matchers:
 
@@ -59,16 +58,12 @@ test('should match Zod schema', () => {
     timestamp: new Date().toISOString(),
   };
 
-  expect(response).toEqual(
-    expect.objectContaining({
-      user: expect.toMatchSchema(
-        z.object({
-          name: z.string(),
-          email: z.email(),
-        })
-      ),
-      timestamp: expect.toMatchSchema(z.iso.datetime()),
-    });
+  expect(response).toEqual({
+    user: expect.objectContaining({
+      name: expect.toMatchSchema(z.string()),
+      email: expect.toMatchSchema(z.email()),
+    }),
+    timestamp: expect.toMatchSchema(z.iso.datetime()),
   });
 });
 ```
