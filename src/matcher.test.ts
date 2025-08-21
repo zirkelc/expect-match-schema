@@ -1,13 +1,11 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec';
 import { type } from 'arktype';
+import { toMatchSchema } from 'expect-match-schema';
 import * as v from 'valibot';
 import { describe, expect, test } from 'vitest';
 import { z } from 'zod';
-import { toMatchSchema } from './matcher.js';
 
-expect.extend({
-  toMatchSchema,
-});
+expect.extend({ toMatchSchema });
 
 describe('toMatchSchema', () => {
   test('should throw an error for invalid schemas', () => {
@@ -34,20 +32,20 @@ describe('toMatchSchema', () => {
     test('should pass for valid data', () => {
       const schema = z.object({
         name: z.string(),
-        age: z.number(),
+        email: z.email(),
       });
 
-      const validData = { name: 'John', age: 30 };
+      const validData = { name: 'John', email: 'john@example.com' };
       expect(validData).toMatchSchema(schema);
     });
 
     test('should fail for invalid data', () => {
       const schema = z.object({
         name: z.string(),
-        age: z.number(),
+        email: z.email(),
       });
 
-      const invalidData = { name: 'John', age: 'thirty' };
+      const invalidData = { name: 'John', email: 'not-an-email' };
       expect(() => expect(invalidData).toMatchSchema(schema)).toThrow(
         'Received value does not match expected schema',
       );
@@ -58,20 +56,20 @@ describe('toMatchSchema', () => {
     test('should pass for valid data', () => {
       const schema = v.object({
         name: v.string(),
-        age: v.number(),
+        email: v.pipe(v.string(), v.email()),
       });
 
-      const validData = { name: 'Jane', age: 25 };
+      const validData = { name: 'Jane', email: 'jane@example.com' };
       expect(validData).toMatchSchema(schema);
     });
 
     test('should fail for invalid data', () => {
       const schema = v.object({
         name: v.string(),
-        age: v.number(),
+        email: v.pipe(v.string(), v.email()),
       });
 
-      const invalidData = { name: 123, age: 25 };
+      const invalidData = { name: 123, email: 'jane@example.com' };
       expect(() => expect(invalidData).toMatchSchema(schema)).toThrow(
         'Received value does not match expected schema',
       );
@@ -82,20 +80,20 @@ describe('toMatchSchema', () => {
     test('should pass for valid data', () => {
       const schema = type({
         name: 'string',
-        age: 'number',
+        email: 'string.email',
       });
 
-      const validData = { name: 'Bob', age: 35 };
+      const validData = { name: 'Bob', email: 'bob@example.com' };
       expect(validData).toMatchSchema(schema);
     });
 
     test('should fail for invalid data', () => {
       const schema = type({
         name: 'string',
-        age: 'number',
+        email: 'string.email',
       });
 
-      const invalidData = { name: 'Bob', age: 'thirty-five' };
+      const invalidData = { name: 'Bob', email: 'not-an-email' };
       expect(() => expect(invalidData).toMatchSchema(schema)).toThrow(
         'Received value does not match expected schema',
       );

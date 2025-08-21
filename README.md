@@ -27,17 +27,34 @@ Import `toMatchSchema` and use [`expect.extend`](https://vitest.dev/api/expect.h
 import { describe, expect, test } from 'vitest';
 import { toMatchSchema } from 'expect-match-schema';
 import { z } from 'zod';
+import { type } from 'arktype';
+import * as v from 'valibot';
 
 expect.extend({ toMatchSchema });
 
-test('should match Zod schema', () => {
-  expect('john@example.com').toMatchSchema(z.email());
-  expect('https://example.com').toMatchSchema(z.url());
-  expect({ name: 'John', email: 'john@example.com' }).toMatchSchema(
+const data = { email: 'john@example.com' };
+
+test("should validate using Zod", () => {
+  expect(data).toMatchSchema(
     z.object({
-      name: z.string(),
       email: z.email(),
-    })
+    }),
+  );
+});
+
+test("should validate using Valibot", () => {
+  expect(data).toMatchSchema(
+    v.object({
+      email: v.pipe(v.string(), v.email()),
+    }),
+  );
+});
+
+test("should validate using ArkType", () => {
+  expect(data).toMatchSchema(
+    type({
+      email: 'string.email',
+    }),
   );
 });
 ```
@@ -47,7 +64,7 @@ test('should match Zod schema', () => {
 You can also use `expect.toMatchSchema()` as an asymmetric matcher with `expect.objectContaining`, `expect.arrayContaining`, and similar matchers:
 
 ```ts
-test('should match Zod schema', () => {
+test('should validate using Zod', () => {
   const response = {
     user: {
       name: 'John Doe',
