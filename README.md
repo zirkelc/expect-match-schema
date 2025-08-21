@@ -4,8 +4,7 @@
 
 This package provides a custom matcher for Vitest and Jest to check data against a [standard schema](https://github.com/standard-schema/standard-schema) like [Zod](https://zod.dev/), [ArkType](https://arktype.io/), [Valibot](https://valibot.dev/) and others.
 
-<img width="1023" height="514" alt="image" src="https://github.com/user-attachments/assets/233729ac-3505-469c-8541-e66cd94adf58" />
-
+<img width="1067" height="533" alt="image" src="https://github.com/user-attachments/assets/e0d8ebcc-c13d-4630-b0b0-a61d264001ca" />
 
 ## [Standard Schema](https://github.com/standard-schema/standard-schema)
 
