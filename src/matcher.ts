@@ -1,6 +1,8 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec';
-import type { RawMatcherFn, SyncExpectationResult } from '@vitest/expect';
+import type { expect } from 'vitest';
 
+type MatchersObject = Parameters<typeof expect.extend>[0];
+type Matcher = MatchersObject[keyof MatchersObject];
 interface CustomMatchers<R = unknown> {
   toMatchSchema: (expected: StandardSchemaV1) => Promise<R>;
 }
@@ -10,11 +12,7 @@ declare module 'vitest' {
   interface AsymmetricMatchersContaining extends CustomMatchers {}
 }
 
-export const toMatchSchema: RawMatcherFn = function (
-  this,
-  received,
-  expected,
-): SyncExpectationResult {
+export const toMatchSchema: Matcher = function (this, received, expected) {
   const { matcherHint, printReceived, printExpected, BOLD_WEIGHT } = this.utils;
 
   if (!expected['~standard']) {

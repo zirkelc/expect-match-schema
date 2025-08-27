@@ -1,9 +1,9 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec';
 import { type } from 'arktype';
-import { toMatchSchema } from 'expect-match-schema';
 import * as v from 'valibot';
 import { describe, expect, test } from 'vitest';
 import { z } from 'zod';
+import { toMatchSchema } from './matcher.js';
 
 expect.extend({ toMatchSchema });
 
