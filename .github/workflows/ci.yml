@@ -54,6 +54,9 @@ jobs:
       - name: Setup and Install
         uses: zirkelc/setup-and-install@v1
 
+      - name: Build
+        run: pnpm build
+
       - uses: zirkelc/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
