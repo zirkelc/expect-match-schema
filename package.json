@@ -1,6 +1,6 @@
 {
   "name": "expect-match-schema",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Custom matcher for Vitest and Jest to check data against a standard schema validation like Zod, ArkType or Valibot",
   "packageManager": "pnpm@9.0.0",
   "main": "./dist/index.cjs",
