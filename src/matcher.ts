@@ -1,5 +1,4 @@
 import type { StandardSchemaV1 } from '@standard-schema/spec';
-import 'vitest';
 import type { RawMatcherFn, SyncExpectationResult } from '@vitest/expect';
 
 interface CustomMatchers<R = unknown> {
