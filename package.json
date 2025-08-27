@@ -21,7 +21,7 @@
     "test": "vitest",
     "lint": "biome check . --write",
     "prepare": "husky",
-    "typecheck": "attw --pack ."
+    "types": "TARBALL=$(pnpm pack | tail -n1) && attw $TARBALL && rm -f $TARBALL"
   },
   "keywords": [],
   "author": "Chris Cook",
